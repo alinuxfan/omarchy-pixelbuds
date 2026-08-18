@@ -97,23 +97,36 @@ async fn run_once(
 
     let mut service = MaestroService::new(handle, channel);
 
-    {
-        let mut st = status.lock().await;
-        st.connected = true;
-        writer.publish(&st).await;
-    }
-    *service_slot.lock().await = Some(service.clone());
-
-    seed_initial_settings(&mut service, status, writer).await;
-
+    // `client.run()` is what actually drains the request queue and reads
+    // responses off the wire; every RPC issued through `service` (seeding,
+    // subscriptions) just queues a request and awaits a reply that only
+    // `client.run()` can deliver. It must be racing alongside those calls
+    // from the start, not started only once they've all already awaited —
+    // otherwise the very first RPC call deadlocks forever.
     let client_task = async move { client.run().await.map_err(anyhow::Error::from) };
-    let runtime_task = listen_runtime_info(service.clone(), status.clone(), writer.clone());
-    let settings_task = listen_settings(service.clone(), status.clone(), writer.clone());
+
+    let session_task = async move {
+        {
+            let mut st = status.lock().await;
+            st.connected = true;
+            writer.publish(&st).await;
+        }
+        *service_slot.lock().await = Some(service.clone());
+
+        seed_initial_settings(&mut service, status, writer).await;
+
+        let runtime_task = listen_runtime_info(service.clone(), status.clone(), writer.clone());
+        let settings_task = listen_settings(service.clone(), status.clone(), writer.clone());
+
+        tokio::select! {
+            res = runtime_task => res,
+            res = settings_task => res,
+        }
+    };
 
     tokio::select! {
         res = client_task => res,
-        res = runtime_task => res,
-        res = settings_task => res,
+        res = session_task => res,
     }
 }
 
