@@ -1,16 +1,16 @@
 [package]
-name = "pbp2ctl"
+name = "pixelbudsctl"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
 repository.workspace = true
-description = "Control client for pixelbudsd, the Pixel Buds Pro 2 Omarchy panel daemon"
+description = "Control client for pixelbudsd, the Pixel Buds Pro Omarchy panel daemon"
 
 [[bin]]
-name = "pbp2ctl"
+name = "pixelbudsctl"
 path = "src/main.rs"
 
 [dependencies]
-pbp2-common = { path = "../pbp2-common" }
+pixelbuds-common = { path = "../pixelbuds-common" }
 anyhow = "1"
 tokio = { version = "1", features = ["rt", "net", "macros", "io-util", "time"] }

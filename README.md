@@ -1,11 +1,11 @@
-<h1 align="center">Pixel Buds Pro 2 for Omarchy</h1>
+<h1 align="center">Pixel Buds Pro for Omarchy</h1>
 
 <p align="center">
   Battery for each bud and the case, ANC mode, Multipoint, on-head detection, Speech Detection and hearing-safety notifications, drawn in Omarchy's own panel idiom.
 </p>
 
 <p align="center">
-  Follows the shape of <a href="https://github.com/thisisgm/omarchy-pods">omarchy-pods</a>, the AirPods panel for Omarchy, adapted to what Pixel Buds Pro 2 actually expose over Google's Maestro protocol.
+  Follows the shape of <a href="https://github.com/thisisgm/omarchy-pods">omarchy-pods</a>, the AirPods panel for Omarchy, adapted to what Pixel Buds Pro actually expose over Google's Maestro protocol.
 </p>
 
 ## What it shows
@@ -41,18 +41,18 @@
   directly on the `maestro` crate from
   [qzed/pbpctrl](https://github.com/qzed/pbpctrl), which already implements
   the protocol as a proper library. See [daemon/README.md](daemon/README.md).
-- Pixel Buds Pro 2 paired to the machine through the usual Bluetooth flow.
+- Pixel Buds Pro paired to the machine through the usual Bluetooth flow.
 
 ## How it works
 
 The plugin does not poll. The daemon writes its status to
-`$XDG_STATE_HOME/pixelbudspro2/status.json` whenever that status changes, and
+`$XDG_STATE_HOME/pixelbudspro/status.json` whenever that status changes, and
 removes the file when it stops. The panel watches it with a `FileView`, so an
-idle desktop runs no processes at all on its behalf. `pbp2ctl` is spawned only
+idle desktop runs no processes at all on its behalf. `pixelbudsctl` is spawned only
 when you actually change something, over a control socket at
-`$XDG_RUNTIME_DIR/pixelbudspro2.sock`.
+`$XDG_RUNTIME_DIR/pixelbudspro.sock`.
 
-The plugin never talks to Bluetooth itself. If `pbp2ctl` is missing or the
+The plugin never talks to Bluetooth itself. If `pixelbudsctl` is missing or the
 daemon is not running, the panel says so in one line instead of drawing an
 empty surface.
 
@@ -60,7 +60,7 @@ empty surface.
 
 ```bash
 omarchy plugin add https://github.com/alinuxfan/omarchy-pixelbuds --enable
-omarchy bar move io.github.alinuxfan.pixelbudspro2
+omarchy bar move io.github.alinuxfan.pixelbudspro
 ```
 
 Then build the daemon out of the copy that just cloned, and hand it to
@@ -68,25 +68,25 @@ systemd. Building it needs a Rust toolchain and D-Bus development headers
 (`dbus` on Arch, `libdbus-1-dev pkg-config` on Debian/Ubuntu):
 
 ```bash
-cd ~/.config/omarchy/plugins/io.github.alinuxfan.pixelbudspro2/daemon
+cd ~/.config/omarchy/plugins/io.github.alinuxfan.pixelbudspro/daemon
 cargo build --release
 install -Dm755 target/release/pixelbudsd "$HOME/.local/bin/pixelbudsd"
-install -Dm755 target/release/pbp2ctl "$HOME/.local/bin/pbp2ctl"
+install -Dm755 target/release/pixelbudsctl "$HOME/.local/bin/pixelbudsctl"
 install -Dm644 pixelbudsd.service "$HOME/.config/systemd/user/pixelbudsd.service"
 systemctl --user daemon-reload
 systemctl --user enable --now pixelbudsd.service
 ```
 
 `~/.local/bin` is where the unit expects the binaries and where the panel
-finds `pbp2ctl`; Omarchy already puts it on `PATH`. The unit is bound to
+finds `pixelbudsctl`; Omarchy already puts it on `PATH`. The unit is bound to
 `graphical-session.target`, so the daemon comes back after a reboot.
 
 ## Remove
 
 ```bash
 systemctl --user disable --now pixelbudsd.service
-rm -f ~/.local/bin/pixelbudsd ~/.local/bin/pbp2ctl ~/.config/systemd/user/pixelbudsd.service
-omarchy plugin remove io.github.alinuxfan.pixelbudspro2
+rm -f ~/.local/bin/pixelbudsd ~/.local/bin/pixelbudsctl ~/.config/systemd/user/pixelbudsd.service
+omarchy plugin remove io.github.alinuxfan.pixelbudspro
 ```
 
 ## Keyboard
@@ -115,7 +115,7 @@ anything.
 | Setting | Default | Notes |
 |---------|---------|-------|
 | Hide when disconnected | on | Leaves the bar entirely rather than sitting there with nothing to say. |
-| Path to pbp2ctl | empty | Leave empty to find it on `PATH`. |
+| Path to pixelbudsctl | empty | Leave empty to find it on `PATH`. |
 
 ## Tests
 
@@ -135,7 +135,7 @@ cd daemon && cargo test --workspace && cargo clippy --workspace --all-targets
 
 ## A caveat worth reading before you file an issue
 
-This plugin was built without a Pixel Buds Pro 2 unit connected to the
+This plugin was built without a Pixel Buds Pro unit connected to the
 machine it was written on. The daemon compiles, links and passes its tests
 against the real `maestro` protocol library, and fails exactly the way it
 should when nothing is paired — but nothing here has been confirmed against

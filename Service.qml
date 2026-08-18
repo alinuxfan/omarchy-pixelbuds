@@ -24,13 +24,13 @@ Item {
   property string lastError: ""
   property string actionStatus: ""
 
-  readonly property string ctlPath: String(setting("ctlPath", "") || "pbp2ctl")
+  readonly property string ctlPath: String(setting("ctlPath", "") || "pixelbudsctl")
   readonly property bool busy: commandProcess.running
   // pixelbudsd publishes here on change, so there is nothing to poll.
   readonly property string statePath: (Quickshell.env("XDG_STATE_HOME")
-    || Quickshell.env("HOME") + "/.local/state") + "/pixelbudspro2/status.json"
+    || Quickshell.env("HOME") + "/.local/state") + "/pixelbudspro/status.json"
   readonly property bool hasBuds: daemonReachable && connected
-  // Unlike AirPods, the Pixel Buds Pro 2 battery only arrives over the Maestro
+  // Unlike AirPods, the Pixel Buds Pro battery only arrives over the Maestro
   // RFCOMM session, which is only open while connected, so this does not need
   // a separate "connected" gate the way omapods' hasBattery does.
   readonly property bool hasBattery: hasBuds
@@ -199,7 +199,7 @@ Item {
         root.refresh()
         root._queued = null
         // Its own field with its own timer, or the next status read wipes it unread.
-        root.actionStatus = Model.elideError(commandErr.text || "pbp2ctl rejected the command")
+        root.actionStatus = Model.elideError(commandErr.text || "pixelbudsctl rejected the command")
         actionStatusTimer.restart()
       }
       if (root._queued) {

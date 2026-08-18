@@ -67,8 +67,8 @@ that project already ships one. See `daemon/README.md`.
 
 # No polling, same as omapods
 
-`Service.qml` watches `$XDG_STATE_HOME/pixelbudspro2/status.json` with a
-`FileView` and runs no process while idle; a click spawns `pbp2ctl` once and
+`Service.qml` watches `$XDG_STATE_HOME/pixelbudspro/status.json` with a
+`FileView` and runs no process while idle; a click spawns `pixelbudsctl` once and
 the process exits. The optimistic-state handling (`_pendingField`,
 `settleTimer`, the single-slot `_queued`) is copied from omapods' `Service.qml`
 unchanged, because the problem it solves — a click should move the control at

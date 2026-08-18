@@ -1,10 +1,10 @@
 [package]
-name = "pbp2-common"
+name = "pixelbuds-common"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
 repository.workspace = true
-description = "Shared status schema and paths for pixelbudsd and pbp2ctl"
+description = "Shared status schema and paths for pixelbudsd and pixelbudsctl"
 
 [dependencies]
 serde = { version = "1", features = ["derive"] }

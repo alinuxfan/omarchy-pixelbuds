@@ -1,5 +1,5 @@
 [Unit]
-Description=pixelbudsd Pixel Buds Pro 2 daemon
+Description=pixelbudsd Pixel Buds Pro daemon
 # The Maestro RFCOMM link needs BlueZ and a session bus, both of which arrive with the graphical session.
 After=graphical-session.target
 PartOf=graphical-session.target

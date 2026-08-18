@@ -2,7 +2,7 @@
 
 The background half of this plugin. omapods (the AirPods panel this project
 follows) vendors a fork of `librepods` here because there was no packaged
-library for the AirPods Accessory Protocol on Linux. Pixel Buds Pro 2 are in
+library for the AirPods Accessory Protocol on Linux. Pixel Buds Pro are in
 the better position: [`pbpctrl`](https://github.com/qzed/pbpctrl) already
 implements the Maestro protocol as two reusable, MIT/Apache-2.0 crates
 (`maestro`, `gfps`), so `pixelbudsd` depends on `maestro` directly rather than
@@ -13,10 +13,10 @@ Two binaries:
 
 - **`pixelbudsd`** — connects to the Maestro RFCOMM channel, subscribes to
   battery, case-placement and settings updates, and publishes them as one
-  line of JSON to `$XDG_STATE_HOME/pixelbudspro2/status.json` on every
+  line of JSON to `$XDG_STATE_HOME/pixelbudspro/status.json` on every
   change. Also opens a control socket at
-  `$XDG_RUNTIME_DIR/pixelbudspro2.sock`.
-- **`pbp2ctl`** — sends one verb to that socket and prints the reply. This is
+  `$XDG_RUNTIME_DIR/pixelbudspro.sock`.
+- **`pixelbudsctl`** — sends one verb to that socket and prints the reply. This is
   what the panel's `Service.qml` spawns for every control.
 
 See `../knowledge/maestro-protocol.md` for where each published field comes
@@ -49,13 +49,13 @@ are reproducible even though that repository is not versioned on crates.io.
 
 ```bash
 install -Dm755 target/release/pixelbudsd "$HOME/.local/bin/pixelbudsd"
-install -Dm755 target/release/pbp2ctl "$HOME/.local/bin/pbp2ctl"
+install -Dm755 target/release/pixelbudsctl "$HOME/.local/bin/pixelbudsctl"
 install -Dm644 pixelbudsd.service "$HOME/.config/systemd/user/pixelbudsd.service"
 systemctl --user daemon-reload
 systemctl --user enable --now pixelbudsd.service
 ```
 
-Pair your Pixel Buds Pro 2 first (`bluetoothctl` or the stock Omarchy
+Pair your Pixel Buds Pro first (`bluetoothctl` or the stock Omarchy
 Bluetooth panel). `pixelbudsd` looks for a paired device advertising the
 Maestro service UUID and needs no further configuration; pass `--device
 <MAC>` to skip discovery.
@@ -67,12 +67,12 @@ RUST_LOG=pixelbudsd=debug,maestro=info cargo run -- --device AA:BB:CC:DD:EE:FF
 ```
 
 ```bash
-pbp2ctl anc:aware      # Off | Active | Aware | Adaptive, i.e. anc:off / anc:active / anc:aware / anc:adaptive
-pbp2ctl multipoint:on
-pbp2ctl ohd:off
-pbp2ctl speech:on
-pbp2ctl volumeexposure:on
-pbp2ctl refresh
+pixelbudsctl anc:aware      # Off | Active | Aware | Adaptive, i.e. anc:off / anc:active / anc:aware / anc:adaptive
+pixelbudsctl multipoint:on
+pixelbudsctl ohd:off
+pixelbudsctl speech:on
+pixelbudsctl volumeexposure:on
+pixelbudsctl refresh
 ```
 
 ## What is not here

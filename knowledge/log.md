@@ -5,6 +5,33 @@ description: What changed in the plugin's understanding of its own platform, and
 tags: [omarchy, pixelbuds, log]
 ---
 
+# 2026-08-18 (continued, rename)
+
+Renamed the product identity throughout — plugin id, binaries, crates, XDG
+paths, docs — from "Pixel Buds Pro 2" to "Pixel Buds Pro": manifest id
+`io.github.alinuxfan.pixelbudspro2` → `...pixelbudspro`, state file
+`$XDG_STATE_HOME/pixelbudspro2/status.json` → `.../pixelbudspro/status.json`,
+control socket `pixelbudspro2.sock` → `pixelbudspro.sock`, `pbp2ctl` →
+`pixelbudsctl`, `pbp2-common` → `pixelbuds-common`,
+`pixel-buds-pro2-identity.md` → `pixel-buds-pro-identity.md`. Rationale:
+`maestro::UUID` discovery and everything this daemon calls is generic Maestro
+protocol support, not specific to the Pro 2 SKU — `pbpctrl` itself is named
+for the original (2021) Pixel Buds Pro, not the Pro 2.
+
+This is a breaking change for the existing install under the old id/paths:
+anyone upgrading needs to `omarchy plugin remove io.github.alinuxfan.pixelbudspro2`
+and the old binaries/service before installing fresh under the new name.
+Acceptable pre-1.0.
+
+Worth being honest about what this does and doesn't change: every real
+hardware verification recorded in this log above was against a Pixel Buds
+Pro **2** unit specifically (see the entries above, left untouched as the
+historical record of what was actually tested and under what name at the
+time). Nothing about today's testing confirms this daemon works with the
+original, non-Pro-2 Pixel Buds Pro; the rename is a naming/branding decision
+based on what the protocol layer requires (nothing Pro-2-specific), not a new
+compatibility claim backed by testing on that hardware.
+
 # 2026-08-18 (continued, on-head detection)
 
 Tested whether `OhdEnable` actually pauses playback on this machine when a

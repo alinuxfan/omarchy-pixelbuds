@@ -1,4 +1,4 @@
-//! Shared between `pixelbudsd` and `pbp2ctl`, so the status schema and the
+//! Shared between `pixelbudsd` and `pixelbudsctl`, so the status schema and the
 //! two paths that matter (state file, control socket) have exactly one
 //! definition. Two copies of a path string is precisely the kind of thing
 //! that drifts; see `knowledge/ipc-socket-location.md` in the plugin root.
@@ -93,7 +93,7 @@ impl Status {
     }
 }
 
-/// `$XDG_STATE_HOME/pixelbudspro2/status.json`, falling back to
+/// `$XDG_STATE_HOME/pixelbudspro/status.json`, falling back to
 /// `$HOME/.local/state` the same way the XDG base directory spec does.
 pub fn state_path() -> PathBuf {
     let base = env::var_os("XDG_STATE_HOME")
@@ -102,10 +102,10 @@ pub fn state_path() -> PathBuf {
             let home = env::var_os("HOME").expect("HOME must be set");
             PathBuf::from(home).join(".local/state")
         });
-    base.join("pixelbudspro2").join("status.json")
+    base.join("pixelbudspro").join("status.json")
 }
 
-/// `$XDG_RUNTIME_DIR/pixelbudspro2.sock`. Returns `None` when
+/// `$XDG_RUNTIME_DIR/pixelbudspro.sock`. Returns `None` when
 /// `XDG_RUNTIME_DIR` is unset rather than falling back to `/tmp`: a fallback
 /// would quietly restore the world-visible control socket the runtime dir is
 /// there to avoid. Every context that matters here (the graphical session,
@@ -115,11 +115,11 @@ pub fn socket_path() -> Option<PathBuf> {
     if dir.is_empty() {
         return None;
     }
-    Some(PathBuf::from(dir).join("pixelbudspro2.sock"))
+    Some(PathBuf::from(dir).join("pixelbudspro.sock"))
 }
 
 /// A verb sent over the control socket, one line, newline-terminated.
-/// The full set pbp2ctl and Service.qml's `_send` agree on.
+/// The full set pixelbudsctl and Service.qml's `_send` agree on.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Verb {
     Anc(i32),
@@ -219,6 +219,6 @@ mod test {
         assert_eq!(socket_path(), None);
 
         unsafe { env::set_var("XDG_RUNTIME_DIR", "/run/user/1000") };
-        assert_eq!(socket_path(), Some(PathBuf::from("/run/user/1000/pixelbudspro2.sock")));
+        assert_eq!(socket_path(), Some(PathBuf::from("/run/user/1000/pixelbudspro.sock")));
     }
 }

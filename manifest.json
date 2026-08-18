@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "id": "io.github.alinuxfan.pixelbudspro2",
-  "name": "Pixel Buds Pro 2",
-  "version": "0.1.0",
+  "id": "io.github.alinuxfan.pixelbudspro",
+  "name": "Pixel Buds Pro",
+  "version": "0.2.0",
   "author": "alinuxfan",
   "license": "MIT",
-  "description": "Pixel Buds Pro 2 in the Omarchy bar: per-bud and case battery, ANC/Transparency/Adaptive mode, multipoint, on-head detection, speech detection and hearing-safety notifications.",
+  "description": "Pixel Buds Pro in the Omarchy bar: per-bud and case battery, ANC/Transparency/Adaptive mode, multipoint, on-head detection, speech detection and hearing-safety notifications.",
   "kinds": [
     "bar-widget"
   ],
@@ -13,7 +13,7 @@
     "barWidget": "Panel.qml"
   },
   "barWidget": {
-    "displayName": "Pixel Buds Pro 2",
+    "displayName": "Pixel Buds Pro",
     "description": "Battery for each bud and the case, plus the ANC and safety controls the Pixel Buds app keeps on the phone.",
     "category": "Audio",
     "allowMultiple": false,
@@ -32,8 +32,8 @@
       {
         "key": "ctlPath",
         "type": "path",
-        "label": "Path to pbp2ctl",
-        "description": "Leave empty to find pbp2ctl on PATH.",
+        "label": "Path to pixelbudsctl",
+        "description": "Leave empty to find pixelbudsctl on PATH.",
         "defaultValue": ""
       }
     ]

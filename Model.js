@@ -75,11 +75,11 @@ function caseFrom(raw) {
   return c
 }
 
-// The whole of $XDG_STATE_HOME/pixelbudspro2/status.json, one line of compact JSON:
+// The whole of $XDG_STATE_HOME/pixelbudspro/status.json, one line of compact JSON:
 // {"anc_mode":2,"case":{"available":true,"charging":false,"level":88},
-//  "connected":true,"device_name":"alinuxfan's Pixel Buds Pro 2",
+//  "connected":true,"device_name":"alinuxfan's Pixel Buds Pro",
 //  "left":{"available":true,"charging":false,"in_case":false,"level":74},
-//  "model_name":"Pixel Buds Pro 2","multipoint_enabled":true,
+//  "model_name":"Pixel Buds Pro","multipoint_enabled":true,
 //  "on_head_detection_enabled":true,"right":{"available":true,"charging":false,"in_case":false,"level":81},
 //  "schema_version":1,"speech_detection_enabled":true,"volume_exposure_notifications_enabled":true}
 function parseStatus(raw) {
@@ -133,7 +133,7 @@ function ancModeName(mode) {
   return "Unknown"
 }
 
-// The four Maestro ANC states, indexed to match ancMode, in the order pbp2ctl accepts them.
+// The four Maestro ANC states, indexed to match ancMode, in the order pixelbudsctl accepts them.
 function ancModeVerb(mode) {
   if (mode === ANC_OFF) return "anc:off"
   if (mode === ANC_ACTIVE) return "anc:active"
@@ -143,7 +143,7 @@ function ancModeVerb(mode) {
 }
 
 // Fixed: Maestro exposes exactly these four states, unlike AirPods where the
-// mode list depends on which model answered. See knowledge/pixel-buds-pro2-identity.md.
+// mode list depends on which model answered. See knowledge/pixel-buds-pro-identity.md.
 function availableModes() {
   return [ANC_OFF, ANC_ACTIVE, ANC_AWARE, ANC_ADAPTIVE]
 }
@@ -164,7 +164,7 @@ function budMeta(bud) {
   return ""
 }
 
-// Collapse pbp2ctl's stderr into one line the panel can show inside a row.
+// Collapse pixelbudsctl's stderr into one line the panel can show inside a row.
 function elideError(text) {
   var value = String(text || "").replace(/\s+/g, " ").trim()
   return value.length > MAX_ERROR_CHARS ? value.substring(0, ELIDED_ERROR_CHARS) + "…" : value

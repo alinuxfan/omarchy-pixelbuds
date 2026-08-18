@@ -6,7 +6,7 @@
 use std::path::PathBuf;
 use std::sync::Arc;
 
-use pbp2_common::Status;
+use pixelbuds_common::Status;
 use tokio::sync::Mutex;
 
 #[derive(Clone)]

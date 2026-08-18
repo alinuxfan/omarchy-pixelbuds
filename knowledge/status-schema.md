@@ -1,11 +1,11 @@
 ---
 type: reference
 title: The pixelbudsd status file and control verbs, key by key
-description: The exact wire format Model.js parses, and every verb pbp2ctl accepts
+description: The exact wire format Model.js parses, and every verb pixelbudsctl accepts
 tags: [pixelbudsd, ipc, schema]
 status: stable
 verified:
-  - by: reading pbp2-common's Status struct and running `cargo test --workspace`, which round-trips this schema through serde
+  - by: reading pixelbuds-common's Status struct and running `cargo test --workspace`, which round-trips this schema through serde
     at: 2026-08-17
 ---
 
@@ -35,7 +35,7 @@ false` means every other field is stale, not just silent. See
 | `schema_version` | int | currently 1, gates incompatible bumps |
 | `connected` | bool | the Maestro RFCOMM session, not the A2DP audio link |
 | `device_name` | string | the BlueZ alias |
-| `model_name` | string | always `"Pixel Buds Pro 2"`; see `pixel-buds-pro2-identity.md` |
+| `model_name` | string | always `"Pixel Buds Pro"`; see `pixel-buds-pro-identity.md` |
 | `anc_mode` | int | 0 unknown, 1 off, 2 active (ANC), 3 aware (Transparency), 4 adaptive — Maestro's own `AncState` values, unrenumbered |
 | `multipoint_enabled` | bool | `MultipointEnable` setting |
 | `on_head_detection_enabled` | bool | `OhdEnable` setting |
@@ -55,9 +55,9 @@ would fail the same way regardless of which encoding was chosen.
 
 # Control verbs
 
-Sent as one line to `$XDG_RUNTIME_DIR/pixelbudspro2.sock`, newline-terminated,
+Sent as one line to `$XDG_RUNTIME_DIR/pixelbudspro.sock`, newline-terminated,
 answered with one line back (`ok` or `error: ...`). Parsed by
-`pbp2_common::parse_verb`, shared by both binaries so the grammar cannot
+`pixelbuds_common::parse_verb`, shared by both binaries so the grammar cannot
 drift between them:
 
 ```
@@ -70,7 +70,7 @@ refresh
 ```
 
 `refresh` does not touch the buds; it re-publishes the daemon's current
-in-memory status. Useful from the terminal (`pbp2ctl refresh`) to confirm the
+in-memory status. Useful from the terminal (`pixelbudsctl refresh`) to confirm the
 daemon is alive and writing. The panel itself never sends it: pressing `r`
 in `Service.qml` calls `stateFile.reload()`, a local re-read of the file that
 does not touch the socket at all, exactly like omapods' `refresh()`.

@@ -9,8 +9,8 @@ import "Model.js" as Model
 
 Panel {
   id: root
-  moduleName: "io.github.alinuxfan.pixelbudspro2"
-  ipcTarget: "pixelbudspro2"
+  moduleName: "io.github.alinuxfan.pixelbudspro"
+  ipcTarget: "pixelbudspro"
   manageIpc: false
 
   property int cursorIndex: 0
@@ -185,7 +185,7 @@ Panel {
           PanelHero {
             id: hero
             width: parent.width
-            title: buds.modelName !== "" ? buds.modelName : (buds.deviceName !== "" ? buds.deviceName : "Pixel Buds Pro 2")
+            title: buds.modelName !== "" ? buds.modelName : (buds.deviceName !== "" ? buds.deviceName : "Pixel Buds Pro")
             meta: buds.hasBuds ? root.heroPhraseText
               : buds.schemaUnsupported ? "Unsupported status schema"
               : buds.daemonReachable ? "Not connected"
@@ -319,7 +319,7 @@ Panel {
             visible: root.guidanceVisible
             width: parent.width
             text: buds.daemonReachable
-              ? "Connect your Pixel Buds Pro 2 to see battery and ANC controls."
+              ? "Connect your Pixel Buds Pro to see battery and ANC controls."
               : "Start the pixelbudsd daemon to see battery and ANC controls."
             color: root.dim
             font.family: root.fontFamily

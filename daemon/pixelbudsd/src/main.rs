@@ -1,10 +1,10 @@
-//! Background daemon for the Pixel Buds Pro 2 Omarchy panel.
+//! Background daemon for the Pixel Buds Pro Omarchy panel.
 //!
 //! Connects to the Maestro RFCOMM channel (the same protocol the Google Buds
 //! Android app speaks), subscribes to battery, placement and settings
-//! updates, and publishes them to `$XDG_STATE_HOME/pixelbudspro2/status.json`
-//! on change. A Unix socket at `$XDG_RUNTIME_DIR/pixelbudspro2.sock` accepts
-//! control verbs from `pbp2ctl`.
+//! updates, and publishes them to `$XDG_STATE_HOME/pixelbudspro/status.json`
+//! on change. A Unix socket at `$XDG_RUNTIME_DIR/pixelbudspro.sock` accepts
+//! control verbs from `pixelbudsctl`.
 //!
 //! See `knowledge/maestro-protocol.md` in the plugin root for where each
 //! field in `Status` comes from on the wire.
@@ -21,12 +21,12 @@ use clap::Parser;
 use tokio::sync::Mutex;
 
 use maestro_link::SharedService;
-use pbp2_common::Status;
+use pixelbuds_common::Status;
 
 #[derive(Debug, Parser)]
-#[command(author, version, about = "Daemon that publishes Pixel Buds Pro 2 status for the Omarchy panel")]
+#[command(author, version, about = "Daemon that publishes Pixel Buds Pro status for the Omarchy panel")]
 struct Args {
-    /// Bluetooth address of the Pixel Buds Pro 2 (searches paired devices for
+    /// Bluetooth address of the Pixel Buds Pro (searches paired devices for
     /// the Maestro service UUID if unspecified).
     #[arg(short, long)]
     device: Option<String>,
@@ -40,8 +40,8 @@ async fn main() -> Result<()> {
 
     let args = Args::parse();
 
-    let state_path = pbp2_common::state_path();
-    let socket_path = pbp2_common::socket_path().context(
+    let state_path = pixelbuds_common::state_path();
+    let socket_path = pixelbuds_common::socket_path().context(
         "XDG_RUNTIME_DIR is not set; refusing to fall back to a world-visible socket location",
     )?;
 
@@ -103,7 +103,7 @@ async fn resolve_device_address(session: &Session, device: Option<&str>) -> Resu
     }
 
     anyhow::bail!(
-        "no paired device advertises the Maestro service UUID ({}); pair your Pixel Buds Pro 2 first, \
+        "no paired device advertises the Maestro service UUID ({}); pair your Pixel Buds Pro first, \
          or pass --device <MAC>",
         maestro::UUID
     )
@@ -129,7 +129,7 @@ mod control_socket {
     use tokio::net::UnixListener;
     use tokio::sync::Mutex;
 
-    use pbp2_common::{parse_verb, Status, Verb};
+    use pixelbuds_common::{parse_verb, Status, Verb};
 
     use crate::maestro_link::SharedService;
     use crate::status_writer::StatusWriter;
@@ -203,7 +203,7 @@ mod control_socket {
 
         let svc = { service.lock().await.clone() };
         let Some(mut svc) = svc else {
-            return "error: not connected to Pixel Buds Pro 2".to_string();
+            return "error: not connected to Pixel Buds Pro".to_string();
         };
 
         let setting = match crate::maestro_link::setting_for_verb(verb) {

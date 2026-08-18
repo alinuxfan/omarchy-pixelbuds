@@ -11,7 +11,7 @@ verified:
 
 # Two protocols were available, one was chosen
 
-Pixel Buds Pro 2 speak two different RFCOMM protocols that a Linux client can
+Pixel Buds Pro speak two different RFCOMM protocols that a Linux client can
 join:
 
 **Google Fast Pair Service (GFPS)**, an openly [specified](https://developers.google.com/nearby/fast-pair/spec)
@@ -65,7 +65,7 @@ in this panel:
 | `VolumeExposureNotifications` | 21 | Volume Notifications toggle |
 
 `AncState`'s wire values (`ANC_STATE_OFF = 1`, `ACTIVE = 2`, `AWARE = 3`,
-`ADAPTIVE = 4`, `UNKNOWN = 0`) are copied verbatim into `pbp2_common::anc` and
+`ADAPTIVE = 4`, `UNKNOWN = 0`) are copied verbatim into `pixelbuds_common::anc` and
 into `Model.js`'s `ANC_*` constants, so nothing in this codebase re-numbers
 them. "Aware" is Maestro's name for what the Pixel Buds app calls
 Transparency mode; the panel shows the app's name and keeps the protocol's

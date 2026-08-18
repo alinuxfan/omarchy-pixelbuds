@@ -20,7 +20,7 @@ lists the Maestro service UUID:
 ```
 
 This is `maestro::UUID`, a constant in `libmaestro/src/lib.rs`. It is not
-Pixel-Buds-Pro-2-specific — it is whatever the Maestro protocol implementation
+Pixel-Buds-Pro-specific — it is whatever the Maestro protocol implementation
 on the bud's firmware advertises, and `pbpctrl`'s own README hedges that the
 tool "might or might not work on other Pixel Buds devices." A second AllHub
 device (a Pixel Watch, say) that also spoke Maestro would confuse this
@@ -34,12 +34,12 @@ omapods tells an AirPods Pro 3 from an AirPods 4 and fills `model_name`
 dynamically. `maestro_pw.proto` has no equivalent field: `SoftwareInfo` and
 `HardwareInfo` carry firmware and serial numbers per component (case, left,
 right) but nothing that names the product line. `pixelbudsd` therefore
-hardcodes `model_name: "Pixel Buds Pro 2"` — this plugin's target, not
+hardcodes `model_name: "Pixel Buds Pro"` — this plugin's target, not
 something it detects — and leaves `device_name` as the live BlueZ alias, the
 same split omapods uses for the two fields, just with one side fixed instead
 of measured.
 
 If this daemon is ever pointed at a different Maestro-speaking device, the
-panel will still label it "Pixel Buds Pro 2" while showing that device's real
+panel will still label it "Pixel Buds Pro" while showing that device's real
 alias and settings. That mislabel is the cost of not having a wire-level
 model field to check against.

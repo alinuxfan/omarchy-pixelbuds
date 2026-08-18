@@ -15,14 +15,14 @@ use tokio::net::UnixStream;
 #[tokio::main(flavor = "current_thread")]
 async fn main() -> ExitCode {
     let Some(verb) = std::env::args().nth(1) else {
-        eprintln!("usage: pbp2ctl <verb>");
-        eprintln!("  e.g.: pbp2ctl anc:aware");
+        eprintln!("usage: pixelbudsctl <verb>");
+        eprintln!("  e.g.: pixelbudsctl anc:aware");
         return ExitCode::from(2);
     };
 
     // Validated here too, not just daemon-side, so a typo fails locally
     // with a message instead of a silent round trip to the socket.
-    if let Err(msg) = pbp2_common::parse_verb(&verb) {
+    if let Err(msg) = pixelbuds_common::parse_verb(&verb) {
         eprintln!("{msg}");
         return ExitCode::from(2);
     }
@@ -41,7 +41,7 @@ async fn main() -> ExitCode {
 }
 
 async fn send(verb: &str) -> anyhow::Result<String> {
-    let Some(path) = pbp2_common::socket_path() else {
+    let Some(path) = pixelbuds_common::socket_path() else {
         anyhow::bail!("XDG_RUNTIME_DIR is not set; pixelbudsd cannot be reached");
     };
 

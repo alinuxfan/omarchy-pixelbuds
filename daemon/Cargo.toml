@@ -2,9 +2,9 @@
 resolver = "2"
 
 members = [
-    "pbp2-common",
+    "pixelbuds-common",
     "pixelbudsd",
-    "pbp2ctl",
+    "pixelbudsctl",
 ]
 
 [workspace.package]

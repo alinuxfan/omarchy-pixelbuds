@@ -1,4 +1,4 @@
-//! Owns the Bluetooth RFCOMM connection to the Pixel Buds Pro 2 and the
+//! Owns the Bluetooth RFCOMM connection to the Pixel Buds Pro and the
 //! Maestro RPC session running over it: connecting, reconnecting after the
 //! buds hand audio off between each other (which resets the socket), and
 //! translating protocol events into `Status` updates.
@@ -21,12 +21,12 @@ use maestro::pwrpc::client::Client;
 use maestro::service::settings::{AncState, SettingId, SettingValue};
 use maestro::service::MaestroService;
 
-use pbp2_common::{anc, BudStatus, CaseStatus, Status, Verb};
+use pixelbuds_common::{anc, BudStatus, CaseStatus, Status, Verb};
 
 use crate::status_writer::StatusWriter;
 
 /// The daemon's live handle to the buds, shared with the control socket so
-/// `pbp2ctl` verbs can be applied without the socket handler owning the
+/// `pixelbudsctl` verbs can be applied without the socket handler owning the
 /// Bluetooth connection itself. `None` whenever no session is up.
 pub type SharedService = Arc<Mutex<Option<MaestroService>>>;
 
@@ -55,7 +55,7 @@ pub async fn run(
         {
             let mut st = status.lock().await;
             st.device_name = dev.alias().await.unwrap_or_default();
-            st.model_name = "Pixel Buds Pro 2".to_string();
+            st.model_name = "Pixel Buds Pro".to_string();
             writer.publish(&st).await;
         }
 

@@ -17,12 +17,12 @@ function check(name, actual, expected) {
 }
 
 // A line pixelbudsd actually writes, copied from the schema doc.
-const live = '{"anc_mode":2,"case":{"available":true,"charging":false,"level":88},"connected":true,"device_name":"alinuxfan’s Pixel Buds Pro 2","left":{"available":true,"charging":false,"in_case":false,"level":74},"model_name":"Pixel Buds Pro 2","multipoint_enabled":true,"on_head_detection_enabled":true,"right":{"available":true,"charging":false,"in_case":false,"level":81},"schema_version":1,"speech_detection_enabled":true,"volume_exposure_notifications_enabled":true}'
+const live = '{"anc_mode":2,"case":{"available":true,"charging":false,"level":88},"connected":true,"device_name":"alinuxfan’s Pixel Buds Pro","left":{"available":true,"charging":false,"in_case":false,"level":74},"model_name":"Pixel Buds Pro","multipoint_enabled":true,"on_head_detection_enabled":true,"right":{"available":true,"charging":false,"in_case":false,"level":81},"schema_version":1,"speech_detection_enabled":true,"volume_exposure_notifications_enabled":true}'
 
 const good = Model.parseStatus(live)
 check("live line parses", good.ok, true)
-check("live modelName", good.modelName, "Pixel Buds Pro 2")
-check("live deviceName keeps the daemon's apostrophe", good.deviceName, "alinuxfan’s Pixel Buds Pro 2")
+check("live modelName", good.modelName, "Pixel Buds Pro")
+check("live deviceName keeps the daemon's apostrophe", good.deviceName, "alinuxfan’s Pixel Buds Pro")
 check("live left level", good.left.level, 74)
 check("live case", good.caseBattery, { level: 88, charging: false })
 check("live ancMode", good.ancMode, Model.ANC_ACTIVE)

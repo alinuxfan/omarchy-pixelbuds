@@ -4,14 +4,14 @@ version.workspace = true
 edition.workspace = true
 license.workspace = true
 repository.workspace = true
-description = "Background daemon that talks Maestro to Google Pixel Buds Pro 2 and publishes status.json for the Omarchy panel"
+description = "Background daemon that talks Maestro to Google Pixel Buds Pro and publishes status.json for the Omarchy panel"
 
 [[bin]]
 name = "pixelbudsd"
 path = "src/main.rs"
 
 [dependencies]
-pbp2-common = { path = "../pbp2-common" }
+pixelbuds-common = { path = "../pixelbuds-common" }
 
 # Maestro protocol client for Pixel Buds Pro (settings, ANC, battery over RFCOMM).
 # Upstream is the pbpctrl project; see daemon/README.md for why this is a
