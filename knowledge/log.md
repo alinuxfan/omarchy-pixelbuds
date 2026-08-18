@@ -5,6 +5,36 @@ description: What changed in the plugin's understanding of its own platform, and
 tags: [omarchy, pixelbuds, log]
 ---
 
+# 2026-08-18 (continued, on-head detection)
+
+Tested whether `OhdEnable` actually pauses playback on this machine when a
+bud is removed, the assumption the panel's original caption ("Pause when a
+bud comes off your ear") made before any hardware was available. It does
+not, on this platform: pulled one bud, then both, with `on_head_detection_enabled: true`
+and audio actively routed through the buds (confirmed via `wpctl`/`pactl`,
+`node.driver-id` pointed at the Pixel Buds sink) — MPRIS `PlaybackStatus`
+never left `Playing` either time.
+
+Checked whether Maestro exposes any passive ear-presence signal we could
+react to ourselves: it does not. The full `maestro_pw.proto` schema has no
+such field — only the write-only `ohd_enable` toggle, some one-time OOBE
+setup constants, and an unrelated `EartipFitTest` service (explicit
+start/stop test, not passive monitoring). Checked upstream `qzed/pbpctrl`
+directly (README, `docs/Notes.md`, CLI source, open issues on GitHub) for
+any documented pause-on-removal behavior or hint at which channel carries
+it: nothing. `OhdEnable` itself is real and verified working — reads and
+writes round-tripped correctly all session — but whatever on-device
+behavior it actually triggers isn't something this daemon can observe or
+react to over Maestro, so nothing here can implement host-side auto-pause
+without first finding the actual wire signal (if `OhdEnable`'s effect is
+even visible on the wire at all, which is unconfirmed).
+
+Updated the panel's caption from the unverified "Pause when a bud comes off
+your ear" to "Device-side behavior; doesn't pause playback here" to stop
+promising a Linux-side effect that doesn't happen. Kept the toggle itself:
+it's a real, confirmed-working setting, independent of whether this host
+can react to its effect.
+
 # 2026-08-18 (continued)
 
 Confirmed live: `anc:*` verbs applied via the panel/`pbp2ctl` do change the

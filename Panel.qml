@@ -291,7 +291,7 @@ Panel {
               width: parent.width
               rowName: "ohd"
               label: "On-head detection"
-              caption: "Pause when a bud comes off your ear"
+              caption: "Device-side behavior; doesn't pause playback here"
               checked: buds.onHeadDetectionEnabled
               onToggled: buds.setOnHeadDetectionEnabled(!buds.onHeadDetectionEnabled)
             }
