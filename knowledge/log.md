@@ -5,6 +5,23 @@ description: What changed in the plugin's understanding of its own platform, and
 tags: [omarchy, pixelbuds, log]
 ---
 
+# 2026-08-18 (continued)
+
+Confirmed live: `anc:*` verbs applied via the panel/`pbp2ctl` do change the
+buds' real ANC mode.
+
+Also caught the mid-air handoff reconnect path
+`not-measured-on-hardware.md` flagged as unexercised: taking a bud out
+triggered exactly the `os error 104` reset `pbpctrl`'s own examples call
+out, and the daemon retried successfully. But `maestro_link::run`'s outer
+loop reported `connected: false` for the entire reconnect window regardless
+of *why* the Maestro session ended, and the panel's default
+`hideWhenDisconnected` reads that as "hide the icon" — so a harmless
+handoff and a real unplug looked identical to the bar. Fixed by reporting
+`connected` from BlueZ's own `Device::is_connected()` after a session ends,
+so the icon only disappears once the Bluetooth link itself is actually
+gone, not on every RFCOMM reset.
+
 # 2026-08-18
 
 First real Pixel Buds Pro 2 hardware connected. `pixelbudsd` compiled and
