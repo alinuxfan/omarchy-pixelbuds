@@ -43,6 +43,29 @@
   the protocol as a proper library. See [daemon/README.md](daemon/README.md).
 - Pixel Buds Pro paired to the machine through the usual Bluetooth flow.
 
+## Compatibility
+
+Nothing this plugin depends on is specific to one Pixel Buds model —
+`pixelbudsd` looks for any paired device advertising the Maestro service
+UUID and speaks whatever that device answers with. In practice that means
+compatibility tracks whichever Pixel Buds actually run Maestro (the
+settings/ANC/battery protocol the real Google Buds app uses), not which
+model this README happens to name.
+
+| Model | Released | ANC | Tested with this plugin |
+|---|---|---|---|
+| Pixel Buds Pro 2 | 2024 | Yes | ✅ Confirmed — see [knowledge/log.md](knowledge/log.md) for what was verified and when |
+| Pixel Buds Pro | 2022 | Yes | Untested. `pbpctrl`, the library this daemon depends on, was itself written against this model, so it's the most likely of the untested ones to work |
+| Pixel Buds 2a | 2025 | Yes | Untested. Shares the Pro 2's Tensor A1 chip and design language, so plausibly Maestro-compatible, but not verified here |
+| Pixel Buds A-Series | 2021 | No | Untested, and likely unsupported — no ANC or on-device settings surface to suggest this hardware speaks Maestro at all |
+| Pixel Buds (2nd gen) | 2020 | No | Untested, likely unsupported for the same reason |
+| Pixel Buds (1st gen) | 2017 | No | Untested, likely unsupported — predates Fast Pair and the wireless charging case entirely |
+
+If you run this on a model other than Pixel Buds Pro 2, please open an
+issue with what you saw (`RUST_LOG=pixelbudsd=debug,maestro=info`, per
+[knowledge/not-measured-on-hardware.md](knowledge/not-measured-on-hardware.md))
+so this table can grow past one confirmed row.
+
 ## How it works
 
 The plugin does not poll. The daemon writes its status to
@@ -135,14 +158,16 @@ cd daemon && cargo test --workspace && cargo clippy --workspace --all-targets
 
 ## A caveat worth reading before you file an issue
 
-This plugin was built without a Pixel Buds Pro unit connected to the
-machine it was written on. The daemon compiles, links and passes its tests
-against the real `maestro` protocol library, and fails exactly the way it
-should when nothing is paired — but nothing here has been confirmed against
-a live device yet. See
+This plugin was originally built without a Pixel Buds unit connected to the
+machine it was written on, and has since been verified end-to-end against
+real Pixel Buds Pro 2 hardware — battery, ANC, and every toggle round-trip
+correctly, and a couple of real bugs turned up and got fixed in the process.
+See [knowledge/log.md](knowledge/log.md) for exactly what was tested and
+when, and the [Compatibility](#compatibility) table above for which other
+models remain unverified.
 [knowledge/not-measured-on-hardware.md](knowledge/not-measured-on-hardware.md)
-for exactly what that does and doesn't cover, and please open an issue with
-what you actually saw on first real pairing.
+still holds for any model that table lists as untested; please open an issue
+with what you actually saw on first real pairing.
 
 ## Credits
 
