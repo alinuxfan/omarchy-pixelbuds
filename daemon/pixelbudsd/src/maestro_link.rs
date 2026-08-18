@@ -66,8 +66,16 @@ pub async fn run(
 
         *service_slot.lock().await = None;
         {
+            // The Maestro RFCOMM session resets when the buds hand audio
+            // processing off between each other, even though the Bluetooth
+            // link itself never drops (pbpctrl's own examples call this out
+            // as `os error 104`, expected and worth retrying rather than
+            // failing on). Only report `connected: false` — which hides the
+            // panel's icon — once BlueZ agrees the device is actually gone,
+            // so a mid-air handoff doesn't flicker the bar.
+            let still_paired = dev.is_connected().await.unwrap_or(false);
             let mut st = status.lock().await;
-            st.connected = false;
+            st.connected = still_paired;
             writer.publish(&st).await;
         }
 
