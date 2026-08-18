@@ -250,7 +250,16 @@ fn apply_runtime_info(status: &mut Status, info: RuntimeInfo) {
     if let Some(battery) = info.battery_info {
         status.left = bud_from(battery.left, in_case_left);
         status.right = bud_from(battery.right, in_case_right);
-        status.case = case_from(battery.case);
+        // Unlike the buds, the case has no independent link to report its own
+        // charge over: the buds only learn it while docked (the pogo pins),
+        // so `battery.case` goes absent the moment they're picked up. Treating
+        // that absence as "unavailable" would blank out a perfectly good
+        // reading a few seconds after every undock; keep the last known case
+        // reading on screen instead, same as a phone's Fast Pair companion
+        // does, and only overwrite it when a fresh docked reading arrives.
+        if let Some(case) = battery.case {
+            status.case = case_from(Some(case));
+        }
     }
 }
 
