@@ -1,0 +1,27 @@
+[package]
+name = "pixelbudsd"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Background daemon that talks Maestro to Google Pixel Buds Pro 2 and publishes status.json for the Omarchy panel"
+
+[[bin]]
+name = "pixelbudsd"
+path = "src/main.rs"
+
+[dependencies]
+pbp2-common = { path = "../pbp2-common" }
+
+# Maestro protocol client for Pixel Buds Pro (settings, ANC, battery over RFCOMM).
+# Upstream is the pbpctrl project; see daemon/README.md for why this is a
+# dependency rather than a vendored fork.
+maestro = { git = "https://github.com/qzed/pbpctrl", package = "maestro" }
+
+anyhow = "1"
+bluer = { version = "0.17", features = ["bluetoothd", "rfcomm"] }
+clap = { version = "4", features = ["derive"] }
+futures = "0.3"
+tokio = { version = "1", features = ["full"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }

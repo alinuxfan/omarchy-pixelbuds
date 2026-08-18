@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "io.github.alinuxfan.pixelbudspro2",
+  "name": "Pixel Buds Pro 2",
+  "version": "0.1.0",
+  "author": "alinuxfan",
+  "license": "MIT",
+  "description": "Pixel Buds Pro 2 in the Omarchy bar: per-bud and case battery, ANC/Transparency/Adaptive mode, multipoint, on-head detection, speech detection and hearing-safety notifications.",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "Panel.qml"
+  },
+  "barWidget": {
+    "displayName": "Pixel Buds Pro 2",
+    "description": "Battery for each bud and the case, plus the ANC and safety controls the Pixel Buds app keeps on the phone.",
+    "category": "Audio",
+    "allowMultiple": false,
+    "defaultSection": "right",
+    "defaults": {
+      "hideWhenDisconnected": true,
+      "ctlPath": ""
+    },
+    "schema": [
+      {
+        "key": "hideWhenDisconnected",
+        "type": "boolean",
+        "label": "Hide the icon when no Pixel Buds are connected",
+        "defaultValue": true
+      },
+      {
+        "key": "ctlPath",
+        "type": "path",
+        "label": "Path to pbp2ctl",
+        "description": "Leave empty to find pbp2ctl on PATH.",
+        "defaultValue": ""
+      }
+    ]
+  }
+}

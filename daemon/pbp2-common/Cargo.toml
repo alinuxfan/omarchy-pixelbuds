@@ -1,0 +1,11 @@
+[package]
+name = "pbp2-common"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Shared status schema and paths for pixelbudsd and pbp2ctl"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
